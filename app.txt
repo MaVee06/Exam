@@ -1,0 +1,115 @@
+import streamlit as st
+import pandas as pd
+import matplotlib.pyplot as plt
+
+st.set_page_config(
+    page_title="eThekwini Election Analytics",
+    layout="wide"
+)
+
+st.title("2026 eThekwini Election Analytics")
+st.subheader("South African Local Government Election Forecast")
+
+st.write(
+    "This application uses 2016 and 2021 ward-level election results "
+    "to forecast projected party vote shares for the 2026 election."
+)
+
+# Main forecast results
+data = {
+    "Party": [
+        "AFRICAN NATIONAL CONGRESS",
+        "DEMOCRATIC ALLIANCE",
+        "ECONOMIC FREEDOM FIGHTERS",
+        "INKATHA FREEDOM PARTY",
+        "ACTIONSA",
+        "ACTIVE CITIZENS COALITION",
+        "ABANTU BATHO CONGRESS",
+        "AFRICAN TRANSFORMATION MOVEMENT",
+        "AFRICAN DEMOCRATIC CHANGE",
+        "JUSTICE AND EMPLOYMENT PARTY"
+    ],
+    "Forecast (%)": [
+        30.330579,
+        24.630818,
+        16.892302,
+        9.136735,
+        2.980694,
+        2.050936,
+        1.499164,
+        1.311321,
+        1.106100,
+        1.011795
+    ],
+    "Projected Votes": [
+        235370,
+        191139,
+        131087,
+        70902,
+        23131,
+        15916,
+        11634,
+        10176,
+        8584,
+        7852
+    ]
+}
+
+df = pd.DataFrame(data)
+
+st.success(
+    "Forecast result: ANC is projected to receive the largest aggregate vote total."
+)
+
+col1, col2 = st.columns(2)
+
+with col1:
+    st.metric(
+        "Projected Winner",
+        "ANC"
+    )
+
+with col2:
+    st.metric(
+        "Projected ANC Vote Share",
+        "30.33%"
+    )
+
+st.subheader("2026 Forecast Results")
+
+st.dataframe(
+    df,
+    use_container_width=True
+)
+
+st.subheader("Projected 2026 Vote Share")
+
+fig, ax = plt.subplots(figsize=(10, 6))
+
+ax.barh(
+    df["Party"],
+    df["Forecast (%)"]
+)
+
+ax.set_xlabel("Projected Vote Share (%)")
+ax.set_ylabel("Political Party")
+ax.set_title("Projected 2026 Vote Share — eThekwini")
+
+ax.invert_yaxis()
+
+plt.tight_layout()
+
+st.pyplot(fig)
+
+st.subheader("Key Conclusion")
+
+st.write(
+    "Based on historical voting trends, the model projects that the ANC "
+    "will receive the largest aggregate vote total in eThekwini "
+    "in the 2026 local government election."
+)
+
+st.warning(
+    "This forecast is an estimate based on historical trends and assumes "
+    "a similar total valid vote count to 2021. Actual election results may differ."
+)
